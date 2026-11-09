@@ -1,0 +1,574 @@
+<title>Для Джамили</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Marck+Script&family=Onest:wght@400;500;600&display=swap">
+<style>
+/* Layout concept: a night walk. A glowing thread runs down the left edge,
+   every moment is a street lamp on it, with a polaroid pinned beside it. */
+:root {
+  --ground: #130a12;
+  --surface: #1d1019;
+  --line: #3d2436;
+  --ink: #f6e9ef;
+  --ink-soft: #c3a6b4;
+  --rose: #ff7a9c;
+  --lamp: #f6c27a;
+  --violet: #9b7cf0;
+  --paper: #f4e8ec;
+  --paper-ink: #3a2330;
+  --rose-glow: rgba(255, 122, 156, 0.16);
+  --violet-glow: rgba(155, 124, 240, 0.22);
+  --lamp-glow: rgba(246, 194, 122, 0.55);
+  --shadow: rgba(0, 0, 0, 0.45);
+  --display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --body: "Onest", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --hand: "Marck Script", "Segoe Script", "Comic Sans MS", cursive;
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--ground);
+  background-image:
+    radial-gradient(75% 36rem at 0% -4%, var(--violet-glow), transparent 70%),
+    radial-gradient(60% 28rem at 100% 6%, var(--rose-glow), transparent 70%);
+  background-repeat: no-repeat;
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2 { font-family: var(--display); font-weight: 600; margin: 0; text-wrap: balance; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.kicker { margin: 0; font-size: 0.75rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-soft); }
+
+/* ---------- gate ---------- */
+.gate {
+  max-width: 26rem;
+  margin-inline: auto;
+  padding-block: 14vh 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+.gate.leaving { opacity: 0; transform: translateY(-12px); }
+.lock { color: var(--rose); }
+.gate h1 { font-size: clamp(2.4rem, 11vw, 3.4rem); line-height: 1.02; font-style: italic; }
+.gate .lead { margin: 0; color: var(--ink-soft); }
+.field { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.4rem; }
+.field input {
+  flex: 1 1 12rem;
+  min-width: 0;
+  font: inherit;
+  font-size: 1.125rem;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 0.85rem 1rem;
+}
+.field input::placeholder { color: var(--ink-soft); opacity: 0.8; }
+.field input:focus-visible { outline: 2px solid var(--lamp); outline-offset: 2px; border-color: transparent; }
+.field button {
+  font: inherit;
+  font-weight: 600;
+  color: var(--ground);
+  background: var(--rose);
+  border: 0;
+  border-radius: 6px;
+  padding: 0.85rem 1.4rem;
+  cursor: pointer;
+}
+.field button:hover { background: var(--lamp); }
+.field button:focus-visible { outline: 2px solid var(--lamp); outline-offset: 2px; }
+.msg { min-height: 3.2em; margin: 0; color: var(--lamp); font-size: 0.98rem; }
+.hint { margin: 0; color: var(--ink-soft); font-size: 0.9rem; }
+.shake { animation: shake 0.4s; }
+@keyframes shake {
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(7px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(3px); }
+}
+
+/* ---------- story ---------- */
+.story { max-width: 34rem; margin-inline: auto; padding-block: 3.5rem 6rem; overflow-x: clip; }
+.hero { padding-bottom: 3rem; animation: rise 0.9s ease both; }
+.hero h1 { font-size: clamp(2.6rem, 12vw, 4rem); font-style: italic; line-height: 1; margin: 0.6rem 0 1rem; }
+.hero p { margin: 0; color: var(--ink-soft); max-width: 30rem; }
+.hero .scroll-note { font-family: var(--hand); color: var(--rose); font-size: 1.4rem; margin-top: 1rem; }
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+.thread { position: relative; padding-left: 2.25rem; }
+.thread::before {
+  content: "";
+  position: absolute;
+  left: 7px;
+  top: 0.6rem;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--rose), var(--violet) 75%, transparent);
+  opacity: 0.75;
+}
+.moment { position: relative; padding-bottom: 3.25rem; transition: transform 0.8s ease; }
+.moment.armed { transform: translateY(18px); }
+.moment::before {
+  content: "";
+  position: absolute;
+  left: -2.25rem;
+  top: 0.3rem;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--lamp);
+  box-shadow: 0 0 0 4px var(--ground), 0 0 20px 5px var(--lamp-glow);
+}
+.when { margin: 0 0 0.35rem; font-size: 0.75rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--lamp); font-weight: 500; }
+.moment h2 { font-size: clamp(1.9rem, 8vw, 2.4rem); line-height: 1.05; font-style: italic; margin-bottom: 0.7rem; }
+.moment p { margin: 0 0 1rem; max-width: 32rem; }
+
+/* polaroids */
+.polaroid {
+  margin: 1.4rem 0 0;
+  max-width: 21rem;
+  background: var(--paper);
+  padding: 0.6rem 0.6rem 0.5rem;
+  border-radius: 2px;
+  box-shadow: 0 14px 34px var(--shadow);
+}
+.polaroid img { display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: cover; background: var(--surface); }
+.polaroid figcaption { font-family: var(--hand); color: var(--paper-ink); font-size: 1.3rem; line-height: 1.2; padding: 0.55rem 0.25rem 0.2rem; }
+.tilt-l { transform: rotate(-1.4deg); }
+.tilt-r { transform: rotate(1.4deg); }
+.pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.8rem; margin-top: 1.4rem; }
+.pair .polaroid { margin: 0; max-width: none; }
+.pair .polaroid figcaption { font-size: 1.1rem; }
+.pair .polaroid:nth-child(2) { margin-top: 1.4rem; }
+
+/* big word */
+.word {
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 600;
+  font-size: clamp(4rem, 22vw, 7rem);
+  line-height: 0.95;
+  color: var(--rose);
+  margin: 0.1rem 0 0.9rem;
+  overflow-wrap: anywhere;
+  text-shadow: 0 0 40px var(--rose-glow);
+}
+
+/* reasons */
+.reasons { list-style: none; margin: 0.4rem 0 0; padding: 0; display: grid; gap: 1.2rem; }
+.reasons strong { display: block; font-family: var(--display); font-style: italic; font-weight: 600; font-size: 1.7rem; line-height: 1.1; color: var(--ink); }
+.reasons span { color: var(--ink-soft); }
+
+/* pull quote */
+.moment .pull { font-family: var(--display); font-style: italic; font-weight: 500; font-size: clamp(1.9rem, 8.5vw, 2.5rem); line-height: 1.12; margin: 0 0 0.8rem; text-wrap: balance; }
+
+/* miss-me button */
+.miss-wrap { position: relative; display: inline-block; }
+.miss-btn {
+  font: inherit;
+  font-weight: 600;
+  color: var(--ground);
+  background: var(--rose);
+  border: 0;
+  border-radius: 999px;
+  padding: 0.8rem 1.6rem;
+  cursor: pointer;
+}
+.miss-btn:hover { background: var(--lamp); }
+.miss-btn:active { transform: scale(0.97); }
+.miss-btn:focus-visible { outline: 2px solid var(--lamp); outline-offset: 3px; }
+.moment .miss-note { font-family: var(--hand); color: var(--rose); font-size: 1.55rem; line-height: 1.25; min-height: 2.6em; margin: 1rem 0 0; }
+.moment .miss-note.idle { color: var(--ink-soft); }
+.pop { position: absolute; left: 50%; top: 0; color: var(--rose); pointer-events: none; font-size: 1.1rem; animation: pop 1.1s ease-out forwards; }
+@keyframes pop {
+  from { transform: translate(-50%, 0) scale(0.6); opacity: 1; }
+  to { transform: translate(calc(-50% + var(--dx, 0px)), -64px) scale(1.2); opacity: 0; }
+}
+
+/* letter */
+.letter { background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 1.4rem 1.2rem; display: grid; gap: 1rem; }
+.moment .letter p { font-family: var(--display); font-style: italic; font-weight: 500; font-size: 1.4rem; line-height: 1.4; margin: 0; }
+.moment .letter p.sign { font-family: var(--hand); font-style: normal; font-weight: 400; color: var(--rose); font-size: 1.35rem; text-align: right; }
+
+/* ending */
+.moment.end { padding-bottom: 0; }
+.moment.end::before { animation: pulse 2.6s ease-in-out infinite; }
+@keyframes pulse { 50% { box-shadow: 0 0 0 4px var(--ground), 0 0 32px 12px var(--lamp-glow); } }
+.moment .finale { font-family: var(--display); font-style: italic; font-weight: 500; font-size: clamp(2rem, 9vw, 2.8rem); line-height: 1.1; color: var(--rose); margin: 0; text-wrap: balance; }
+.moment .finale-sub { font-family: var(--hand); color: var(--ink-soft); font-size: 1.45rem; line-height: 1.3; margin: 0.8rem 0 0; }
+
+/* music toggle */
+.music {
+  position: fixed;
+  right: max(16px, env(safe-area-inset-right, 0px));
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  z-index: 20;
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--rose);
+  cursor: pointer;
+  box-shadow: 0 8px 24px var(--shadow);
+}
+.music:focus-visible { outline: 2px solid var(--lamp); outline-offset: 3px; }
+.music[aria-pressed="true"]::after {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 1px solid var(--rose);
+  animation: ring 2.2s ease-out infinite;
+}
+@keyframes ring { from { transform: scale(0.9); opacity: 0.6; } to { transform: scale(1.35); opacity: 0; } }
+.music[aria-pressed="true"] .off { display: none; }
+
+/* floating hearts after unlock */
+.hearts { position: fixed; inset: 0; z-index: 5; pointer-events: none; overflow: hidden; }
+.heart { position: absolute; bottom: -2rem; color: var(--rose); opacity: 0; font-size: var(--s, 1.4rem); animation: floatUp var(--d, 5s) ease-out var(--delay, 0s) forwards; }
+.heart.alt { color: var(--violet); }
+.heart.warm { color: var(--lamp); }
+@keyframes floatUp {
+  0% { transform: translate(0, 0) scale(0.6); opacity: 0; }
+  15% { opacity: 0.9; }
+  100% { transform: translate(var(--x, 0px), -105vh) scale(1.1); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+</style>
+
+<audio id="song" src="audio/swim.mp3" preload="auto" loop></audio>
+
+<div class="gate" id="gate">
+  <svg class="lock" viewBox="0 0 48 48" width="52" height="52" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <rect x="9" y="21" width="30" height="21" rx="4"></rect>
+    <path d="M16 21v-6a8 8 0 0 1 16 0v6"></path>
+    <path d="M24 37C24 37 17.5 33 17.5 29A3.2 3.2 0 0 1 24 27.6A3.2 3.2 0 0 1 30.5 29C30.5 33 24 37 24 37Z" fill="currentColor" stroke="none"></path>
+  </svg>
+  <p class="kicker">закрытый вход</p>
+  <h1>Только для Джамили</h1>
+  <p class="lead">Тут нужно секретное слово. Ты его знаешь 💗</p>
+  <form id="gateForm" autocomplete="off" novalidate>
+    <label class="sr" for="word">Секретное слово</label>
+    <div class="field" id="field">
+      <input id="word" type="text" placeholder="секретное слово" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" enterkeyhint="go">
+      <button type="submit">Войти</button>
+    </div>
+  </form>
+  <p class="msg" id="msg" role="status" aria-live="polite"></p>
+  <p class="hint" id="hint" hidden>Подсказка: три буквы, и ты их знаешь лучше всех.</p>
+</div>
+
+<main class="story" id="story" hidden>
+  <header class="hero">
+    <p class="kicker">для Джамили</p>
+    <h1>Привет, Джамиля.</h1>
+    <p>Я собрал для тебя маленький кусочек интернета, где всё про нас. Листай вниз потихоньку. Я очень старался, и мне хочется, чтобы ты улыбнулась 😊</p>
+    <p class="scroll-note">листай вниз ↓</p>
+  </header>
+
+  <div class="thread">
+    <section class="moment">
+      <p class="when">Наш вечер</p>
+      <h2>Кофе и прогулка</h2>
+      <p>Два стаканчика, один вечер и никакого плана. Мы пили кофе, гуляли, и мне было так хорошо, что время куда-то делось.</p>
+      <figure class="polaroid tilt-l">
+        <img src="img/p1.jpg" alt="Два стаканчика с кофе в руках вечером на улице" loading="lazy">
+        <figcaption>наши стаканчики</figcaption>
+      </figure>
+    </section>
+
+    <section class="moment">
+      <p class="when">Огни парка</p>
+      <h2>Сердечко из рук</h2>
+      <p>Темно, чуть криво и вообще не по правилам фотографии. Зато от этого сердечка мне и сейчас тепло. Фотограф из меня так себе, а вот компания лучшая.</p>
+      <div class="pair">
+        <figure class="polaroid tilt-r">
+          <img src="img/p3.jpg" alt="Руки, сложенные в сердечко, на фоне вечернего парка с огнями" loading="lazy">
+          <figcaption>огни парка</figcaption>
+        </figure>
+        <figure class="polaroid tilt-l">
+          <img src="img/p2.jpg" alt="Руки, сложенные в сердечко, крупным планом" loading="lazy">
+          <figcaption>вблизи</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="moment">
+      <p class="when">Происшествие</p>
+      <h2>Ты попала мне по глазу</h2>
+      <p>Ты била меня, и так мило, а потом попала прямо по глазу. Я пострадал, но не в обиде. Вот орудие.</p>
+      <figure class="polaroid tilt-r">
+        <img src="img/p4.jpg" alt="Рука с длинным маникюром, белым с чёрными кончиками" loading="lazy">
+        <figcaption>орудие преступления</figcaption>
+      </figure>
+    </section>
+
+    <section class="moment">
+      <p class="when">Твоё словечко</p>
+      <div class="word">ужс</div>
+      <p>Сначала это было твоё слово. Теперь оно и моё. Я говорю его и сразу улыбаюсь, потому что вспоминаю тебя 🥹</p>
+    </section>
+
+    <section class="moment">
+      <p class="when">Если коротко</p>
+      <h2>За что</h2>
+      <ul class="reasons">
+        <li><strong>За характер.</strong><span>С ним не соскучишься. Проверено на собственном глазу.</span></li>
+        <li><strong>За глаза.</strong><span>В них легко потеряться. Дорогу назад я пока не ищу.</span></li>
+        <li><strong>За то, кем ты являешься.</strong><span>Просто за то, что это ты. Остальное бонус.</span></li>
+      </ul>
+    </section>
+
+    <section class="moment">
+      <p class="when">Каждый раз</p>
+      <p class="pull">Все наши встречи искренние.</p>
+      <p>Ни одной натянутой минуты. С тобой не надо стараться, и это лучшее чувство.</p>
+    </section>
+
+    <section class="moment">
+      <p class="when">Маленькая кнопка</p>
+      <h2>Если соскучилась</h2>
+      <p>Нажми, и я отвечу.</p>
+      <div class="miss-wrap" id="missWrap">
+        <button class="miss-btn" id="miss" type="button">Нажми меня</button>
+      </div>
+      <p class="miss-note idle" id="missNote" aria-live="polite">здесь появится ответ</p>
+    </section>
+
+    <section class="moment">
+      <p class="when">Главное</p>
+      <h2>Просто признание</h2>
+      <div class="letter">
+        <p>Джамиля, ты мне очень нравишься. Больше, чем я успел сказать вслух.</p>
+        <p>С тобой смешно, спокойно и чуть-чуть опасно. И мне это очень нравится.</p>
+        <p>Хочу ещё твоих «ужс», ещё прогулок, ещё твоих рук в моих и даже ударов по глазу. А иногда я смотрю на тебя и думаю совсем не про кофе 😏</p>
+        <p class="sign">тот, кому ты попала по глазу</p>
+      </div>
+    </section>
+
+    <section class="moment end">
+      <p class="finale">Это только начало нашей истории</p>
+      <p class="finale-sub">и я очень хочу писать её с тобой 💗</p>
+    </section>
+  </div>
+
+  <button class="music" id="music" type="button" aria-pressed="false" aria-label="Музыка: включить или выключить" title="Музыка">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M9 18V6l10-2v12"></path>
+      <circle cx="6.5" cy="18" r="2.5"></circle>
+      <circle cx="16.5" cy="16" r="2.5"></circle>
+      <path class="off" d="M3 3l18 18"></path>
+    </svg>
+  </button>
+</main>
+
+<script src="config.js"></script>
+<script>
+(function () {
+  var SECRET = 'ужс';
+  var VOLUME = 0.85;
+
+  var gate = document.getElementById('gate');
+  var story = document.getElementById('story');
+  var form = document.getElementById('gateForm');
+  var input = document.getElementById('word');
+  var field = document.getElementById('field');
+  var msg = document.getElementById('msg');
+  var hint = document.getElementById('hint');
+  var song = document.getElementById('song');
+  var musicBtn = document.getElementById('music');
+  var missBtn = document.getElementById('miss');
+  var missWrap = document.getElementById('missWrap');
+  var missNote = document.getElementById('missNote');
+
+  var tries = 0;
+  var fails = 0;
+  var missCount = 0;
+
+  var wrong = [
+    'Хм. Ты точно Джамиля? 🤨',
+    'Мимо, солнышко. Попробуй ещё, я никуда не спешу.',
+    'Не-а. Но мне нравится твоя настойчивость 😏',
+    'Не то слово, но ты всё равно очень милая, когда ошибаешься 🥺',
+    'Это слово знаешь только ты. Вспоминай, я подожду 💗',
+    'Ошибка. Но я в тебя верю ✨',
+    'Нет-нет-нет. Звучит мило, но не подходит 🫶',
+    'Выдохни, вспомни, как ты это говоришь 🌙',
+    'Так, красотка, соберись 😘',
+    'Ещё разок? Я не обижаюсь, я просто рад, что ты здесь 💞',
+    'Не подошло. Зато я улыбаюсь, представляя, как ты хмуришься 😌',
+    'Почти получилось. Ладно, не почти. Но я всё равно люблю твои попытки 🤍'
+  ];
+
+  var missMessages = [
+    'Я тоже. Очень.',
+    'Иди сюда, обниму 🫂',
+    'Напиши мне прямо сейчас, я жду 💌',
+    'Ты у меня в мыслях чаще, чем ты думаешь.',
+    'Я бы сейчас просто взял тебя за руку.',
+    'Скучаю так, что готов получить по глазу ещё раз 😌',
+    'Нажимай ещё. Мне нравится, что ты по мне скучаешь 😏'
+  ];
+
+  function cfg() { return window.SITE_CONFIG || {}; }
+  function calm() { return !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches); }
+  function norm(s) { return s.replace(/\s+/g, '').toLowerCase(); }
+
+  /* ---------- Telegram notification ---------- */
+  function notify(text) {
+    var c = cfg();
+    if (!c.telegramToken || !c.telegramChatId) return;
+    var when = new Date().toLocaleString('ru-RU');
+    var url = 'https://api.telegram.org/bot' + c.telegramToken + '/sendMessage' +
+      '?chat_id=' + encodeURIComponent(c.telegramChatId) +
+      '&text=' + encodeURIComponent(text + '\n🕒 ' + when);
+    try {
+      fetch(url, { method: 'GET', mode: 'no-cors', keepalive: true }).catch(function () {});
+    } catch (err) { /* the notification is a bonus, never block the page */ }
+  }
+
+  /* ---------- music ---------- */
+  function setMusicState(on) { musicBtn.setAttribute('aria-pressed', on ? 'true' : 'false'); }
+
+  function fadeIn() {
+    var v = 0;
+    var timer = setInterval(function () {
+      v = Math.min(VOLUME, v + 0.05);
+      try { song.volume = v; } catch (err) {}
+      if (v >= VOLUME) clearInterval(timer);
+    }, 150);
+  }
+
+  function startMusic() {
+    var p;
+    try { song.volume = 0; } catch (err) {}
+    try { p = song.play(); } catch (err) { setMusicState(false); return; }
+    if (p && p.then) {
+      p.then(function () { setMusicState(true); fadeIn(); })
+       .catch(function () { setMusicState(false); });
+    } else {
+      setMusicState(true);
+      fadeIn();
+    }
+  }
+
+  musicBtn.addEventListener('click', function () {
+    if (song.paused) { startMusic(); } else { song.pause(); setMusicState(false); }
+  });
+
+  /* ---------- hearts ---------- */
+  function hearts(n) {
+    if (calm()) return;
+    var layer = document.createElement('div');
+    layer.className = 'hearts';
+    layer.setAttribute('aria-hidden', 'true');
+    for (var i = 0; i < n; i++) {
+      var h = document.createElement('span');
+      h.className = 'heart' + (i % 5 === 0 ? ' alt' : (i % 4 === 0 ? ' warm' : ''));
+      h.textContent = '♥';
+      h.style.left = (Math.random() * 92 + 2) + '%';
+      h.style.setProperty('--s', (1 + Math.random() * 1.4).toFixed(2) + 'rem');
+      h.style.setProperty('--d', (4 + Math.random() * 3).toFixed(1) + 's');
+      h.style.setProperty('--delay', (Math.random() * 1.8).toFixed(1) + 's');
+      h.style.setProperty('--x', (Math.random() * 60 - 30).toFixed(0) + 'px');
+      layer.appendChild(h);
+    }
+    document.body.appendChild(layer);
+    setTimeout(function () { if (layer.parentNode) layer.parentNode.removeChild(layer); }, 9500);
+  }
+
+  /* ---------- gate ---------- */
+  function bad(text) {
+    msg.textContent = text;
+    field.classList.remove('shake');
+    void field.offsetWidth;
+    field.classList.add('shake');
+    input.select();
+  }
+
+  function initReveal() {
+    var moments = document.querySelectorAll('.moment');
+    if (!('IntersectionObserver' in window) || calm()) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          e.target.classList.remove('armed');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    moments.forEach(function (m, i) {
+      if (i > 0) m.classList.add('armed');
+      io.observe(m);
+    });
+  }
+
+  function unlock() {
+    msg.textContent = '';
+    startMusic(); /* called inside the tap, so the browser allows sound */
+    gate.classList.add('leaving');
+    setTimeout(function () {
+      gate.hidden = true;
+      story.hidden = false;
+      window.scrollTo(0, 0);
+      initReveal();
+      hearts(16);
+    }, 450);
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var v = norm(input.value);
+    if (!v) { bad('Сначала введи слово 🥺'); return; }
+    tries += 1;
+    if (v === SECRET) {
+      notify('💗 Джамиля вошла на сайт');
+      unlock();
+      return;
+    }
+    if (cfg().notifyOnWrong !== false) {
+      notify('🙈 Джамиля пробует слово, пока мимо (попытка ' + tries + ')');
+    }
+    if (v === 'ужас') { bad('Почти. Но у нас короче 😏'); return; }
+    var text = wrong[fails % wrong.length];
+    fails += 1;
+    if (fails >= 2) hint.hidden = false;
+    bad(text);
+  });
+
+  /* ---------- "if you miss me" button ---------- */
+  missBtn.addEventListener('click', function () {
+    missNote.classList.remove('idle');
+    missNote.textContent = missMessages[missCount % missMessages.length];
+    missCount += 1;
+    if (calm()) return;
+    for (var i = 0; i < 6; i++) {
+      var p = document.createElement('span');
+      p.className = 'pop';
+      p.textContent = '♥';
+      p.style.setProperty('--dx', (Math.random() * 90 - 45).toFixed(0) + 'px');
+      p.style.animationDelay = (i * 0.06).toFixed(2) + 's';
+      missWrap.appendChild(p);
+      (function (el) {
+        setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 1500);
+      })(p);
+    }
+  });
+})();
+</script>
